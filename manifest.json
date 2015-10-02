@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+
+  "name": "Youtube Subscription Control",
+  "description": "Control YouTube videos from subcription list",
+  "version": "0.0.1",
+
+  "browser_action": 
+  {
+	"default_icon": "images/youtubeIcon.png",
+	"default_popup": "popup.html"
+  },
+  
+  "permissions": 
+  [
+	"activeTab",
+	"tabs",
+	"https://www.googleapis.com/*",
+	"identity"
+  ]
+}
