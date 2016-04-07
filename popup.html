@@ -1,22 +1,17 @@
 <!doctype html>
 <html>
   <head>
-    <title>My Uploads</title>
-    <link rel="stylesheet" type="text/css" href="my_uploads.css">
+    <title>Youtube Subscription Control</title>
+    <script src="popup.js"></script>
   </head>
   <body>
-    <div id="login-container" class="pre-auth">
-      This application requires access to your YouTube account.
-      Please <a href="#" id="login-link">authorize</a> to continue.
-    </div>
-    <div id="video-container"></div>
-    <div class="button-container">
-      <button id="prev-button" class="paging-button" onclick="previousPage();">Previous Page</button>
-      <button id="next-button" class="paging-button" onclick="nextPage();">Next Page</button>
-    </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script type="text/javascript" src="auth.js"></script>
-    <script type="text/javascript" src="my_uploads.js"></script>
-    <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
+    <h1>Youtube Subscription Control</h1>
+	<img id="prevVid" src="images/prev1.png" alt="Play Next Video" style="margin:0px 4px;width:32px;height:32px;border:0;" onclick="myFunction()"/> 	<!-- Makes clickable img-->
+	<!--<img id="startList" src="images/video2.png" alt="Play Next Video" style="margin:0px 4px;width:32px;height:32px;border:0;" onclick="myFunction()"/> -->  <!-- Makes clickable img-->
+	<img id="startList" src="images/play_32.png" alt="Play Next Video" style="margin:0px 4px;width:32px;height:32px;border:0;" onclick="myFunction()"/>  <!-- Makes clickable img-->
+    <!--<img id="stopList" src="images/stop.png" alt="Play Next Video" style="width:32px;height:32px;border:0;" onclick="myFunction()"/> -->	    	<!-- Makes clickable img-->
+	<img id="nextVid" src="images/next1.png" alt="Play Next Video" style="margin:0px 4px;width:32px;height:32px;border:0;" onclick="myFunction()"/> 	<!-- Makes clickable img-->
+	<!--<button id="nextVid">Play Next Video!</button> --> 																								<!-- Makes button with given txt-->
+	<!--<input type="button" id="nextVid" style="background: url(images/prev1.png);width:32px;height:32px;" /> -->	<!-- Makes button with background img-->
   </body>
 </html>

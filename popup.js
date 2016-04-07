@@ -1,22 +1,44 @@
- document.addEventListener('DOMContentLoaded', function() 
+ document.addEventListener('DOMContentLoaded', function(tab) 
  {
-	var checkPageButton = document.getElementById('nextVid');
-	checkPageButton.addEventListener('click', function() 
+	var checkStartButton = document.getElementById('startList');
+	var checkNextButton = document.getElementById('nextVid');
+	var checkPrevButton = document.getElementById('prevVid');
+	
+	checkStartButton.addEventListener('click', function(tab) 
 	{
-		window.alert("WORKING");
-		
 		var subscriptionURL = "https://www.youtube.com/feed/subscriptions";
 		chrome.tabs.create({ url: subscriptionURL });
-		window.alert("HI");  //This is not showing up
-		 
-		 
-		 //Trying to test this part out
-		 //Will try YouTube API
-		 /*
-		var newURL = html($('.yt-lockup-title'));
-		window.alert(newURL);
-		chrome.tabs.create({ url: newURL });
-		*/
-		 
+
+		chrome.tabs.executeScript(tab.id, 
+		{
+			"file": "createList.js"
+		}, function () 
+		{ 
+			console.log("List Created ... "); // Notification on Completion
+		});
+		
 	}, false);
+	
+	checkNextButton.addEventListener('click', function(tab) 
+	{
+		chrome.tabs.executeScript(tab.id, 
+		{
+			"file": "nextVid.js"
+		}, function () 
+		{ 
+			console.log("Loaded Next Video ... "); // Notification on Completion
+		});
+	}, false);
+	
+	checkPrevButton.addEventListener('click', function(tab) 
+	{
+		chrome.tabs.executeScript(tab.id, 
+		{
+			"file": "prevVid.js"
+		}, function () 
+		{ 
+			console.log("Loaded Previous Video ... "); // Notification on Completion
+		});
+	}, false);
+	
 }, false);
