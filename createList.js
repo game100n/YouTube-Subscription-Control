@@ -62,5 +62,5 @@ function callback()
 }
 
 setTimeout(loadVids(),0);
-setTimeout(loadVids(), 500);
+setTimeout(loadVids(),500);
 setTimeout(callback(),1000);

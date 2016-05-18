@@ -3,6 +3,7 @@
 	var checkStartButton = document.getElementById('startList');
 	var checkNextButton = document.getElementById('nextVid');
 	var checkPrevButton = document.getElementById('prevVid');
+	var checkAutoPlay = document.getElementById('apToggle');
 	
 	checkStartButton.addEventListener('click', function(tab) 
 	{
@@ -40,5 +41,19 @@
 			console.log("Loaded Previous Video ... "); // Notification on Completion
 		});
 	}, false);
+	
+	
+	checkAutoPlay.addEventListener('change', function(tab) 
+	{
+		chrome.tabs.executeScript(tab.id, 
+		{
+			"file": "apToggle.js"
+		}, function () 
+		{ 
+			//alert("Autoplay Toggled")
+			console.log("Autoplay Toggled ... "); // Notification on Completion
+		});
+	}, false);
+	
 	
 }, false);
