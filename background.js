@@ -173,7 +173,13 @@ chrome.runtime.onConnect.addListener(function(port)
 		else if (msg.cmd == "APTOGGLE")
 		{
 			//Toggle if user wants to autoplay videos 
-			autoPlay = !autoPlay;
+			//autoPlay = !autoPlay;
+			autoplay = msg.state;
+			//alert(msg.state);
+			if(autoplay == false)
+			{
+				clearTimeout(timer);
+			}
 		}
 		
 		else 

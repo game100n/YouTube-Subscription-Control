@@ -22,6 +22,10 @@
 	
 	checkNextButton.addEventListener('click', function(tab) 
 	{
+		var port = chrome.runtime.connect({name: "YTlinkPass"});
+		port.postMessage({cmd: "NEXT"});
+		console.log("Loaded Next Video ... ");
+		/*
 		chrome.tabs.executeScript(tab.id, 
 		{
 			"file": "nextVid.js"
@@ -29,10 +33,15 @@
 		{ 
 			console.log("Loaded Next Video ... "); // Notification on Completion
 		});
+		*/
 	}, false);
 	
 	checkPrevButton.addEventListener('click', function(tab) 
 	{
+		var port = chrome.runtime.connect({name: "YTlinkPass"});
+		port.postMessage({cmd: "PREV"});
+		console.log("Loaded Previous Video ... ");
+		/*
 		chrome.tabs.executeScript(tab.id, 
 		{
 			"file": "prevVid.js"
@@ -40,25 +49,39 @@
 		{ 
 			console.log("Loaded Previous Video ... "); // Notification on Completion
 		});
+		*/
 	}, false);
 	
 	//Use local storage to save apToggle state
-	chrome.storage.local.get({setting: false}, function(data) 
+	//Set default state
+	chrome.storage.local.get({state: false}, function(data) 
 	{
-		checkAutoPlay.checked = data.setting;
+		checkAutoPlay.checked = data.state;
 	});
 	
 	checkAutoPlay.addEventListener('change', function(tab) 
 	{
+		var port = chrome.runtime.connect({name: "YTlinkPass"});
+		port.postMessage({cmd: "APTOGGLE", state: checkAutoPlay.checked});
+		chrome.storage.local.set({state: checkAutoPlay.checked}, function()
+		{
+			console.log("Autoplay Toggled to " + checkAutoPlay.checked); // Notification on Completion
+		});
+		
+		/* 
 		chrome.tabs.executeScript(tab.id, 
 		{
 			"file": "apToggle.js"
 		}, function () 
 		{ 
 			//alert("Autoplay Toggled")
-			console.log("Autoplay Toggled ... "); // Notification on Completion
-			chrome.storage.local.set({setting: checkAutoPlay.checked});
+			//console.log("Autoplay Toggled ... "); // Notification on Completion
+			chrome.storage.local.set({state: checkAutoPlay.checked}), function()
+			{
+				console.log("Autoplay Toggled ... "); // Notification on Completion
+			});
 		});
+		*/
 	}, false);
 	
 }, false);
