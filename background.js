@@ -3,80 +3,154 @@ var index = 0;
 var activeTabId;
 var autoPlay = false;
 var timer;
+//var timeout;
 
-function playNext()
+function setTimer(msg)
+{
+	//alert("Time Set: " + msg)
+	var timeoutTempString = msg.split(':');
+	var timeoutTemp = [];
+	
+	for(var ii = 0; ii < timeoutTempString.length; ii++)
+	{
+		timeoutTemp[ii] = Number(timeoutTempString[ii])
+	}
+	
+	if(timeoutTempString.length == 3)
+	{
+		msg = (timeoutTemp[0]*120 + timeoutTemp[1]*60 + timeoutTemp[2])*1000;
+		//alert(timeoutTemp[0] + ":" + timeoutTemp[1] + ":" + timeoutTemp[2]);
+	}
+	else
+	{
+		msg = (timeoutTemp[0]*60 + timeoutTemp[1])*1000;
+		//alert("BreakDown: " + timeoutTemp[0] + ":" + timeoutTemp[1] + "\n" + timeoutTemp[0]*60 + ":" + timeoutTemp[1] + "::" + (timeoutTemp[0]*60 +timeoutTemp[1]));
+		//alert("Maths: " + timeoutTemp[0]*60 + ":" + timeoutTemp[1] + "::" + (timeoutTemp[0]*60 +timeoutTemp[1]))
+	}
+	
+	alert("Time in ms: " + msg);
+	timer = setTimeout(apNext(), msg);
+}
+
+function requestTime(activeTabId)
 {
 	return function()
 	{
-		clearTimeout(timer);
-		index++;
-		if(index >= YTlinks.length)
+		//alert("Time Requested")
+		
+		/* var links = document.getElementById('eow-title').title;
+		alert(links); */
+		
+		/* chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+			chrome.tabs.sendMessage(tabs[0].id, { action: "grab_time" }, setTimer);
+		}); */
+		
+		chrome.tabs.sendMessage(activeTabId, { action: "grab_time" }, setTimer);
+		
+		/* //var timeout = document.getElementsByClassName("ytp-bound-time-right")[0].innerHTML;
+		alert(timout);
+		var timeouttemp = timeout.split(':');
+		timeout = (timeouttemp[0]*60 + timeouttemp[1])*1000;
+		alert(timeout); */
+		
+		/* chrome.tabs.executeScript(activeTabId, 
 		{
-			alert("Reached End of List");
-			index--;
-		}
-		else
+			"file": "content.js"
+		}, function() 
+		{ 
+			console.log("Firing Content Script... "); // Notification on Completion
+		});
+		
+		chrome.runtime.onConnect.addListener(function(port) 
 		{
-			chrome.tabs.remove(activeTabId);
-			
-			chrome.tabs.create({url: YTlinks[index]});
-			//var win=window.open(YTlinks[index], '_blank');
-			//win.focus();
-			
-			chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) 
+			console.assert(port.name == "vidLen");
+			port.onMessage.addListener(function(msg) 
 			{
-				 // since only one tab should be active and in the current window at once
-				 // the return variable should only have one entry
-				 //var activeTab = arrayOfTabs[0];
-				 activeTabId = arrayOfTabs[0].id;
+				alert(msg);
+				//timer = setTimeout(playNext(), msg);
 			});
-			
-			if(autoPlay)
+		}); */
+		
+		//timer = setTimeout(playNext(), timeout);
+	}
+}
+
+function apNext()
+{
+	return function()
+	{
+		playNext();
+	}
+}
+
+function playNext()
+{
+	clearTimeout(timer);
+	index++;
+	if(index >= YTlinks.length)
+	{
+		alert("Reached End of List");
+		index--;
+	}
+	else
+	{
+		chrome.tabs.remove(activeTabId);
+		
+		chrome.tabs.create({url: YTlinks[index]});
+		//var win=window.open(YTlinks[index], '_blank');
+		//win.focus();
+		
+		chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) 
+		{
+			 // since only one tab should be active and in the current window at once
+			 // the return variable should only have one entry
+			 //var activeTab = arrayOfTabs[0];
+			 activeTabId = arrayOfTabs[0].id;
+		});
+		
+		if(autoPlay)
+		{
+			//alert("NextVid Autoplay")
+			/* chrome.tabs.onUpdated.addListener(function(activeTabId, info) 
 			{
-				var timeout = document.getElementsByClassName("ytp-bound-time-right")[0].innerHTML;
-				var timeouttemp = timeout.split(':');
-				timeout = (timeouttemp[0]*60 + timeouttemp[1])*1000;
-				alert(timeout);
-				timer = setTimeout(playNext(), timeout);
-			}
-			
+				if (info.status == "complete") 
+				{
+					alert("Page Loaded")
+					requestTime();
+				}
+			}); */
+			setTimeout(requestTime(activeTabId), 3000);
 		}
 	}
 }
 
 function playPrev()
 {
-	return function()
+	clearTimeout(timer);
+	index--;
+	if(index < 0)
 	{
-		alert("WORKING")
-		clearTimeout(timer);
-		index--;
-		if(index < 0)
+		alert("No More Previous Videos");
+		index++;
+	}
+	else
+	{
+		chrome.tabs.remove(activeTabId);
+		
+		chrome.tabs.create({url: YTlinks[index]});
+		//var win=window.open(YTlinks[index], '_blank');
+		//win.focus();
+		
+		chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) 
 		{
-			alert("No More Previous Video");
-			index++;
-		}
-		else
+			activeTabId = arrayOfTabs[0].id;
+		});
+		
+		if(autoPlay)
 		{
-			chrome.tabs.remove(activeTabId);
-			
-			chrome.tabs.create({url: YTlinks[index]});
-			//var win=window.open(YTlinks[index], '_blank');
-			//win.focus();
-			
-			chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) 
-			{
-				activeTabId = arrayOfTabs[0].id;
-			});
-			
-			if(autoPlay)
-			{
-				var timeout = document.getElementsByClassName("ytp-bound-time-right")[0].innerHTML;
-				var timeouttemp = timeout.split(':');
-				timeout = (timeouttemp[0]*60 + timeouttemp[1])*1000;
-				timer = setTimeout(playNext(), timeout);
-			}
-			
+			//alert("PrevVid Autoplay")
+			//window.onload = 
+			setTimeout(requestTime(activeTabId), 3000);
 		}
 	}
 }
@@ -122,7 +196,7 @@ chrome.runtime.onConnect.addListener(function(port)
 			
 			chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) 
 			{
-				 activeTabId = arrayOfTabs[0].id;
+				activeTabId = arrayOfTabs[0].id;
 			});
 			
 			/*
@@ -137,10 +211,9 @@ chrome.runtime.onConnect.addListener(function(port)
 			
 			if(autoPlay)
 			{
-				var timeout = document.getElementsByClassName("ytp-bound-time-right")[0].innerHTML;
-				var timeouttemp = timeout.split(':');
-				timeout = (timeouttemp[0]*60 + timeouttemp[1])*1000;
-				timer = setTimeout(playNext(), timeout);
+				//alert("Init Autoplay")
+				//window.onload = 
+				setTimeout(requestTime(activeTabId), 3000);
 			}
 			
 		}

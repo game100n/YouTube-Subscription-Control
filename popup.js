@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', function(tab) 
+ document.addEventListener('DOMContentLoaded', function(tab)
  {
 	var checkStartButton = document.getElementById('startList');
 	var checkNextButton = document.getElementById('nextVid');
@@ -42,6 +42,11 @@
 		});
 	}, false);
 	
+	//Use local storage to save apToggle state
+	chrome.storage.local.get({setting: false}, function(data) 
+	{
+		checkAutoPlay.checked = data.setting;
+	});
 	
 	checkAutoPlay.addEventListener('change', function(tab) 
 	{
@@ -52,8 +57,8 @@
 		{ 
 			//alert("Autoplay Toggled")
 			console.log("Autoplay Toggled ... "); // Notification on Completion
+			chrome.storage.local.set({setting: checkAutoPlay.checked});
 		});
 	}, false);
-	
 	
 }, false);

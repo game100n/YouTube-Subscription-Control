@@ -20,10 +20,17 @@
 	"scripts": ["background.js"]
   },
   
+  "content_scripts": 
+  [{
+		"matches": ["*://*.www.youtube.com/*"],
+		"js":      ["content.js"]
+    }],
+  
   "permissions": 
   [
 	"activeTab",
 	"tabs",
-	"https://www.youtube.com/feed/subscriptions"
+	"storage",
+	"https://www.youtube.com/feed/subscriptions"	
   ]
 }
