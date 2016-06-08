@@ -5,7 +5,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)
     if (request.action == "grab_time")
 	{
 		//alert("RX Request")
-		var timeout = document.getElementsByClassName("ytp-bound-time-right")[0].innerHTML;
+		var timeout = document.getElementsByClassName("ytp-time-duration")[0].innerHTML;
 		//alert("Content: " + timeout);
 		//Call the specified callback, passing the video length content as argument
 		sendResponse(timeout);

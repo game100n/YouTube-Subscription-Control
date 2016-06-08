@@ -7,7 +7,7 @@ var timer;
 
 function setTimer(msg)
 {
-	//alert("Time Set: " + msg)
+	console.log("Time queryed: " + msg);
 	var timeoutTempString = msg.split(':');
 	var timeoutTemp = [];
 	
@@ -28,7 +28,7 @@ function setTimer(msg)
 		//alert("Maths: " + timeoutTemp[0]*60 + ":" + timeoutTemp[1] + "::" + (timeoutTemp[0]*60 +timeoutTemp[1]))
 	}
 	
-	alert("Time in ms: " + msg);
+	console.log("Time in ms: " + msg);
 	timer = setTimeout(apNext(), msg);
 }
 
@@ -41,11 +41,11 @@ function requestTime(activeTabId)
 		/* var links = document.getElementById('eow-title').title;
 		alert(links); */
 		
-		/* chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 			chrome.tabs.sendMessage(tabs[0].id, { action: "grab_time" }, setTimer);
-		}); */
-		
-		chrome.tabs.sendMessage(activeTabId, { action: "grab_time" }, setTimer);
+		});
+		console.log("Requested Timer Info ... ");
+		//chrome.tabs.sendMessage(activeTabId, { action: "grab_time" }, setTimer);
 		
 		/* //var timeout = document.getElementsByClassName("ytp-bound-time-right")[0].innerHTML;
 		alert(timout);
@@ -110,18 +110,20 @@ function playNext()
 		
 		if(autoPlay)
 		{
-			//alert("NextVid Autoplay")
+			console.log("NextVid Autoplay ... ");
 			/* chrome.tabs.onUpdated.addListener(function(activeTabId, info) 
 			{
 				if (info.status == "complete") 
 				{
-					alert("Page Loaded")
-					requestTime();
+					console.log("Page Loaded");
+					requestTime(activeTabId);
 				}
 			}); */
-			setTimeout(requestTime(activeTabId), 3000);
+			setTimeout(requestTime(activeTabId), 4000);
 		}
 	}
+	
+	console.log("NextVid ... " + autoPlay);
 }
 
 function playPrev()
@@ -153,6 +155,7 @@ function playPrev()
 			setTimeout(requestTime(activeTabId), 3000);
 		}
 	}
+	console.log("PrevVid ... ");
 }
 
 chrome.runtime.onConnect.addListener(function(port) 
@@ -172,14 +175,15 @@ chrome.runtime.onConnect.addListener(function(port)
 		
 		else if (msg.cmd == "APTOGGLE")
 		{
-			//Toggle if user wants to autoplay videos 
+			//Toggle if user wants to autoPlay videos 
 			//autoPlay = !autoPlay;
-			autoplay = msg.state;
+			autoPlay = msg.state;
 			//alert(msg.state);
-			if(autoplay == false)
+			if(autoPlay == false)
 			{
 				clearTimeout(timer);
 			}
+			console.log("apToggle ... ");
 		}
 		
 		else 
@@ -192,7 +196,7 @@ chrome.runtime.onConnect.addListener(function(port)
 			//alert(YTlinks[0]);
 			//chrome.tabs.create({url: YTlinks[0]});
 			
-			chrome.tabs.query( { active: true, currentWindow: true }, function( tabs ) 
+			chrome.tabs.query( { active: true, currentWindow: true }, function(tabs) 
 			{
 				chrome.tabs.update(tabs[0].id, {url: YTlinks[0]}); 
 			});
@@ -217,7 +221,7 @@ chrome.runtime.onConnect.addListener(function(port)
 			
 			if(autoPlay)
 			{
-				//alert("Init Autoplay")
+				console.log("Init Autoplay");
 				//window.onload = 
 				setTimeout(requestTime(activeTabId), 3000);
 			}
