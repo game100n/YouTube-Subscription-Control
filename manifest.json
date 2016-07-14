@@ -3,7 +3,7 @@
 
   "name": "Youtube Subscription Control",
   "description": "Control YouTube videos from subcription feed",
-  "version": "2.1.3",
+  "version": "2.2",
   "icons":
   {
 	"128":"images/extIcon.png"
